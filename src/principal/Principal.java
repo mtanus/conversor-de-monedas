@@ -17,18 +17,19 @@ public class Principal {
         try {
             String codigoMonedaBase = "BRL";
             String monedaJson = miConsultaDeMoneda.consultaPrecioDeMoneda(codigoMonedaBase);
-            if (monedaJson.contains("error-type")) {
-                throw new ErrorAlConsultarPrecioException("Error al consultar la exchangerate API");
-            }
-            MonedaExchangeRate miMonedaER = gson.
+            MonedaExchangeRate monedaER = gson.
                     fromJson(monedaJson, MonedaExchangeRate.class);
+            if (monedaER.result().equals("error")) {
+                throw new ErrorAlConsultarPrecioException("Error al consultar " +
+                        "la ExchangeRate API para la moneda " + codigoMonedaBase);
+            }
 //            System.out.println("El JSON de la moneda consultada es: " + precioDeMoneda);
-            System.out.println("El registro obtenido para la moneda consultada es: " + miMonedaER);
-            Moneda miMoneda = new Moneda(miMonedaER);
+            System.out.println("El registro obtenido para la moneda consultada es: " + monedaER);
+            Moneda miMoneda = new Moneda(monedaER);
             System.out.println("La moneda consultada es: " + miMoneda);
 
-            double montoAConvertir = 1.0;
-            String codigoOtraMoneda = "ARSgento";
+            double montoAConvertir = 10.0;
+            String codigoOtraMoneda = "ARS";
             System.out.println(montoAConvertir + " " + codigoMonedaBase + " = " +
                     miConsultaDeMoneda.
                             convierteMontoEntreMonedas(montoAConvertir, miMoneda, codigoOtraMoneda) +
