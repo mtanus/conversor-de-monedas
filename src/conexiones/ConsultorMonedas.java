@@ -1,5 +1,8 @@
 package conexiones;
 
+import excepciones.ErrorAlConsultarPrecioException;
+import modelos.Moneda;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -21,5 +24,15 @@ public class ConsultorMonedas {
                 .send(solicitudHttp, HttpResponse.BodyHandlers.ofString());
 
         return respuestaHttp.body();
+    }
+
+    public double convierteMontoEntreMonedas (double montoMonedaBase,
+                                              Moneda monedaBase, String codigoOtraMoneda) {
+        if (monedaBase.getPrecioEnOtrasMonedas().containsKey(codigoOtraMoneda)) {
+            return montoMonedaBase * monedaBase.getPrecioEnOtrasMonedas().get(codigoOtraMoneda);
+        } else {
+            throw new ErrorAlConsultarPrecioException("Moneda " +
+                    codigoOtraMoneda + " no hallada en la API.");
+        }
     }
 }
