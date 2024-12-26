@@ -15,16 +15,25 @@ public class Principal {
         Gson gson = new Gson();
 
         try {
-            String precioDeMoneda = miConsultaDeMoneda.consultaPrecioDeMoneda("ARS");
-            if (precioDeMoneda.contains("error-type")) {
-                throw new ErrorAlConsultarPrecioException("Error al consultar la exchangerate API");
+            String codigoMonedaBase = "BRL";
+            String monedaJson = miConsultaDeMoneda.consultaPrecioDeMoneda(codigoMonedaBase);
+            MonedaExchangeRate monedaER = gson.
+                    fromJson(monedaJson, MonedaExchangeRate.class);
+            if (monedaER.result().equals("error")) {
+                throw new ErrorAlConsultarPrecioException("Error al consultar " +
+                        "la ExchangeRate API para la moneda " + codigoMonedaBase);
             }
-            MonedaExchangeRate miMonedaER = gson.fromJson(precioDeMoneda,
-                    MonedaExchangeRate.class);
 //            System.out.println("El JSON de la moneda consultada es: " + precioDeMoneda);
-            System.out.println("El registro obtenido para la moneda consultada es: " + miMonedaER);
-            Moneda miMoneda = new Moneda(miMonedaER);
+            System.out.println("El registro obtenido para la moneda consultada es: " + monedaER);
+            Moneda miMoneda = new Moneda(monedaER);
             System.out.println("La moneda consultada es: " + miMoneda);
+
+            double montoAConvertir = 10.0;
+            String codigoOtraMoneda = "ARS";
+            System.out.println(montoAConvertir + " " + codigoMonedaBase + " = " +
+                    miConsultaDeMoneda.
+                            convierteMontoEntreMonedas(montoAConvertir, miMoneda, codigoOtraMoneda) +
+                    " " + codigoOtraMoneda);
 
         } catch (ErrorAlConsultarPrecioException e) {
             System.out.println(e.getMessage());

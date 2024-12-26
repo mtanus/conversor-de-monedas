@@ -15,6 +15,18 @@ public class Moneda {
         this.precioEnOtrasMonedas = monedaER.conversion_rates();
     }
 
+    public String getCodigoIso() {
+        return this.codigoIso;
+    }
+
+    public String getFechaDeActualizacionDelPrecio() {
+        return this.fechaDeActualizacionDelPrecio;
+    }
+
+    public Map<String, Double> getPrecioEnOtrasMonedas() {
+        return this.precioEnOtrasMonedas;
+    }
+
     @Override
     public String toString() {
         return "Moneda: " + this.codigoIso;
