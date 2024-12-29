@@ -8,6 +8,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Properties;
 
 public class ConsultorMonedas {
     private HttpClient clienteHttp = HttpClient.newBuilder().build();
@@ -16,7 +19,16 @@ public class ConsultorMonedas {
     }
 
     public String consultaPrecioDeMoneda(String codigoDeMoneda) throws IOException, InterruptedException {
-        String uri = "https://v6.exchangerate-api.com/v6/0c2afea0978086b6400e1d7c/latest/" + codigoDeMoneda;
+        // Obtengo la Api Key
+        var propiedades = new Properties();
+        var archivoDeConfiguracion = Paths.get("miConfiguracion.env");
+        try (var inputStream = Files.newInputStream(archivoDeConfiguracion)) {
+            propiedades.load(inputStream);
+        }
+        String apiKey = propiedades.get("EXCHANGE_RATE_API_KEY").toString();
+        String uri = "https://v6.exchangerate-api.com/v6/" + apiKey + "/latest/" + codigoDeMoneda;
+
+        // Realizo la solicitud
         HttpRequest solicitudHttp = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
                 .build();

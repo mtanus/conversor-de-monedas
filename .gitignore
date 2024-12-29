@@ -1,3 +1,6 @@
+### Archivo de configuración ###
+miConfiguracion.env
+
 ### IntelliJ IDEA ###
 out/
 !**/src/main/**/out/

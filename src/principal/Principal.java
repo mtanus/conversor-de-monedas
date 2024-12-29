@@ -8,6 +8,7 @@ import modelos.Moneda;
 import modelos.MonedaExchangeRate;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -57,11 +58,13 @@ public class Principal {
                 Moneda miMoneda = new Moneda(monedaER);
 
                 // Muestro el resultado de la conversión entre monedas
+                System.out.println("####################################");
                 System.out.println(
                         montoAConvertir + " " + codigoMonedaBase + " = " +
-                                miConsultaDeMoneda.
-                                        convierteMontoEntreMonedas(montoAConvertir, miMoneda, codigoMonedaDestino) +
-                                " " + codigoMonedaDestino + "\n");
+                                BigDecimal.valueOf(miConsultaDeMoneda.convierteMontoEntreMonedas(
+                                        montoAConvertir, miMoneda, codigoMonedaDestino)) +
+                                " " + codigoMonedaDestino);
+                System.out.println("####################################" + "\n" );
 
             } catch (ErrorAlConsultarPrecioException e) {
                 System.out.println(e.getMessage());
